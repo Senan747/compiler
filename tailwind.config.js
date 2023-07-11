@@ -67,6 +67,7 @@ export default {
         'gega-light': '#999999',
         'gega-green': '#28E98C',
         'gega-dark': '#191919',
+        'gega-light-black': '#1f1f1f'
       },
     },
   },
