@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import {FaAngleRight} from 'react-icons/fa'
 
 const MyComponent = () => {
   const [language, setLanguage] = useState('');
   const [input, setInput] = useState('');
   const [result, setResult] = useState('');
+  const [output, setOutput] = useState('');
   const [rows, setRows] = useState('25')
+  const [error, setError] = useState("")
 
   const fetchData = async () => {
     const code = encodeURIComponent(input);
@@ -25,6 +28,8 @@ const MyComponent = () => {
       const response = await fetch('https://api.codex.jaagrav.in', config);
       const responseData = await response.json();
       setResult(JSON.stringify(responseData));
+      setOutput(responseData.output); 
+      setError(responseData.error)
     } catch (error) {
       console.log(error);
     }
@@ -54,12 +59,7 @@ const MyComponent = () => {
 
   return (
     <div className='flex flex-row h-screen w-screen bg-gega-dark'>
-
-      {/* 
-      <input type="text" value={input} onChange={handleInput} />
-      <button onClick={handleRun}>Run</button>
-      <div>Result: {result}</div> */}
-      <div className='m-9 border-2 border-gega-green min-w-[700px]'>
+      <div className='m-9 border-2 border-gega-green min-w-[700px] min-h-[700px]'>
         <div className='flex flex-row justify-between my-2'>
           <select value={language} onChange={handleSelection} className='ml-10'>
             <option value="">Select a language</option>
@@ -80,13 +80,19 @@ const MyComponent = () => {
             }
           </div>
           <div className='bg-gega-light-black'>
-            <textarea className='bg-gega-light-black text-gega-white' name="input" id="" cols="85" rows={rows}></textarea>
+            <textarea value={input} onChange={handleInput} className='bg-gega-light-black text-gega-white pl-1' name="input" id="" cols="85" rows={rows}></textarea>
           </div>
-           
         </div>
       </div>
-      <div>
-
+      <div className={`flex flex-col min-h-[700px] min-w-[700px] m-9 border-2 border-gega-green ${error ? 'border-red-700' : 'border-gega-green'}`}>
+        <div className=''>
+          <FaAngleRight className='absolute top-10 text-gega-light'/>
+          <input type="text" className='bg-gega-light-black text-gega-white w-full border-none outline-none pl-5'/>
+        </div>
+        <div className='text-gega-light'>
+          {error}
+          {output}
+        </div>
       </div>
     </div>
   );
