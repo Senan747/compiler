@@ -8,12 +8,12 @@ const MyComponent = () => {
   const [output, setOutput] = useState('');
   const [rows, setRows] = useState('25')
   const [error, setError] = useState("")
+  const [userInput, setUserInput] = useState("")
 
   const fetchData = async () => {
     const code = encodeURIComponent(input);
     const encodedLanguage = encodeURIComponent(language);
-    const encodedInput = encodeURIComponent('7');
-
+    const encodedInput = encodeURIComponent(userInput);
     const data = `code=${code}&language=${encodedLanguage}&input=${encodedInput}`;
 
     const config = {
@@ -48,6 +48,14 @@ const MyComponent = () => {
       fetchData();
     }
   };
+  const handleUserInput = (e) => {
+    setUserInput(e.target.value);
+  }
+  const handleKeyEvent = (event) => {
+    if(event.key === 'Enter'){
+      handleRun();
+    }
+  }
 
   const renderList = (rows) => {
     const listItems = [];
@@ -61,7 +69,7 @@ const MyComponent = () => {
     <div className='flex flex-row h-screen w-screen bg-gega-dark'>
       <div className='m-9 border-2 border-gega-green min-w-[700px] min-h-[700px]'>
         <div className='flex flex-row justify-between my-2'>
-          <select value={language} onChange={handleSelection} className='ml-10'>
+          <select value={language} onChange={handleSelection} className='ml-10 bg-gega-green border-none outline-none'>
             <option value="">Select a language</option>
             <option value="py">Python</option>
             <option value="java">Java</option>
@@ -87,7 +95,7 @@ const MyComponent = () => {
       <div className={`flex flex-col min-h-[700px] min-w-[700px] m-9 border-2 border-gega-green ${error ? 'border-red-700' : 'border-gega-green'}`}>
         <div className=''>
           <FaAngleRight className='absolute top-10 text-gega-light'/>
-          <input type="text" className='bg-gega-light-black text-gega-white w-full border-none outline-none pl-5'/>
+          <input type="text" value={userInput} onChange={handleUserInput} onKeyDown={handleKeyEvent} className='bg-gega-light-black text-gega-white w-full border-none outline-none pl-5'/>
         </div>
         <div className='text-gega-light'>
           {error}
