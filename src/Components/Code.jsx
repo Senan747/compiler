@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 
 
-function Code({ error }) {
+function Code({ onDataUpdate }) {
     const [language, setLanguage] = useState('');
     const [input, setInput] = useState('');
-    // const [result, setResult] = useState('');
-    const [output, setOutput] = useState('');
+    const [result, setResult] = useState('');
+    const [outputs, setOutputs] = useState('');
     const [rows, setRows] = useState('25')
     const [errors, setErrors] = useState("")
     const [userInput, setUserInput] = useState("")
@@ -31,9 +31,9 @@ function Code({ error }) {
         const response = await fetch('https://api.codex.jaagrav.in', config);
         const responseData = await response.json();
         setResult(JSON.stringify(responseData));
-        setOutput(responseData.output); 
+        setOutputs(responseData.output); 
         setErrors(responseData.error)
-        error = errors;
+        onDataUpdate(responseData.error, responseData.output);
       } catch (error) {
         console.log(error);
       }
@@ -45,18 +45,44 @@ function Code({ error }) {
   
     const handleInput = (e) => {
       setInput(e.target.value);
-      const inputCode = event.target.value;
-    setInput(inputCode);
+      const inputCode = e.target.value;
+      setInput(inputCode);
   
-  
-    const lines = inputCode.split('\n');
-    const lastLine = lines[lines.length - 1];
-    const words = lastLine.trim().split(' ');
-    const lastWord = words[words.length - 1];
+      const lines = inputCode.split('\n');
+      const lastLine = lines[lines.length - 1];
+      const words = lastLine.trim().split(' ');
+      const lastWord = words[words.length - 1];
       
-  
-    const suggested = cppKeywords.filter(keyword => keyword.startsWith(lastWord));
-    setSuggestedKeywords(suggested);
+      if(language === 'cpp') {
+        const suggested = cpp.filter(keyword => keyword.startsWith(lastWord));
+        setSuggestedKeywords(suggested);
+      }
+
+      if(language === 'py') {
+        const suggested = py.filter(keyword => keyword.startsWith(lastWord));
+        setSuggestedKeywords(suggested);
+      }
+      if(language === 'cs') {
+        const suggested = cs.filter(keyword => keyword.startsWith(lastWord));
+        setSuggestedKeywords(suggested);
+      }
+      if(language === 'js') {
+        const suggested = js.filter(keyword => keyword.startsWith(lastWord));
+        setSuggestedKeywords(suggested);
+      }
+      if(language === 'java') {
+        const suggested = java.filter(keyword => keyword.startsWith(lastWord));
+        setSuggestedKeywords(suggested);
+      }
+      if(language === 'c') {
+        const suggested = c.filter(keyword => keyword.startsWith(lastWord));
+        setSuggestedKeywords(suggested);
+      }
+      if(language === 'go') {
+        const suggested = go.filter(keyword => keyword.startsWith(lastWord));
+        setSuggestedKeywords(suggested);
+      }
+      
     };
   
     const handleRun = () => {
@@ -80,74 +106,7 @@ function Code({ error }) {
       }
       return listItems;
     };
-  const handleCodeChange = (event) => {
-    const inputCode = event.target.value;
-    setInput(inputCode);
-  
-    const lines = inputCode.split('\n');
-    const lastLine = lines[lines.length - 1];
-    const words = lastLine.trim().split(' ');
-    const lastWord = words[words.length - 1];
-  
-  
-    
-   
-    const pythonKeywords = [
-        'and', 'as', 'assert', 'async', 'await', 'break', 'class', 'continue', 'def',
-        'del', 'elif', 'else', 'except', 'False', 'finally', 'for', 'from', 'global',
-        'if', 'import', 'in', 'is', 'lambda', 'None', 'nonlocal', 'not', 'or', 'pass',
-        'raise', 'return', 'True', 'try', 'while', 'with', 'yield'
-        ];
-    
-    const javaKeywords = [
-        'abstract', 'assert', 'boolean', 'break', 'byte', 'case', 'catch', 'char',
-        'class', 'const', 'continue', 'default', 'do', 'double', 'else', 'enum',
-        'extends', 'final', 'finally', 'float', 'for', 'goto', 'if', 'implements',
-        'import', 'instanceof', 'int', 'interface', 'long', 'native', 'new', 'package',
-        'private', 'protected', 'public', 'return', 'short', 'static', 'strictfp',
-        'super', 'switch', 'synchronized', 'this', 'throw', 'throws', 'transient',
-        'try', 'void', 'volatile', 'while'
-        ];
-    
-    const cKeywords = [
-        'auto', 'break', 'case', 'char', 'const', 'continue', 'default', 'do',
-        'double', 'else', 'enum', 'extern', 'float', 'for', 'goto', 'if',
-        'int', 'long', 'register', 'return', 'short', 'signed', 'sizeof', 'static',
-        'struct', 'switch', 'typedef', 'union', 'unsigned', 'void', 'volatile', 'while'
-        ];
-        
-    const goKeywords = [
-        'break', 'default', 'func', 'interface', 'select', 'case', 'defer', 'go',
-        'map', 'struct', 'chan', 'else', 'goto', 'package', 'switch', 'const',
-        'fallthrough', 'if', 'range', 'type', 'continue', 'for', 'import', 'return',
-        'var'
-        ];
-        
-    const csharpKeywords = [
-        'abstract', 'as', 'base', 'bool', 'break', 'byte', 'case', 'catch', 'char',
-        'checked', 'class', 'const', 'continue', 'decimal', 'default', 'delegate',
-        'do', 'double', 'else', 'enum', 'event', 'explicit', 'extern', 'false',
-        'finally', 'fixed', 'float', 'for', 'foreach', 'goto', 'if', 'implicit',
-        'in', 'int', 'interface', 'internal', 'is', 'lock', 'long', 'namespace',
-        'new', 'null', 'object', 'operator', 'out', 'override', 'params', 'private',
-        'protected', 'public', 'readonly', 'ref', 'return', 'sbyte', 'sealed',
-        'short', 'sizeof', 'stackalloc', 'static', 'string', 'struct', 'switch',
-        'this', 'throw', 'true', 'try', 'typeof', 'uint', 'ulong', 'unchecked',
-        'unsafe', 'ushort', 'using', 'using static', 'void', 'volatile', 'while',
-        'yield'
-        ];
-        
-    const nodejsKeywords = [
-        'break', 'case', 'catch', 'class', 'const', 'continue', 'debugger', 'default',
-        'delete', 'do', 'else', 'enum', 'export', 'extends', 'false', 'finally', 'for',
-        'function', 'if', 'import', 'in', 'instanceof', 'new', 'null', 'return',
-        'super', 'switch', 'this', 'throw', 'true', 'try', 'typeof', 'undefined',
-        'var', 'void', 'while', 'with', 'yield'
-        ];
-  
-    const suggested = cppKeywords.filter(keyword => keyword.startsWith(lastWord));
-    setSuggestedKeywords(suggested);
-  };
+
   
   const handleSuggestionClick = (keyword) => {
     setSelectedKeyword(keyword);
@@ -159,7 +118,7 @@ function Code({ error }) {
     const updatedCode = lines.join('\n');
     setInput(updatedCode);
   };
-  const cppKeywords = [
+  const cpp = [
           'alignas', 'alignof', 'and', 'and_eq', 'asm', 'atomic_cancel', 'atomic_commit',
           'atomic_noexcept', 'auto', 'bitand', 'bitor', 'bool', 'break', 'case', 'catch',
           'char', 'char8_t', 'char16_t', 'char32_t', 'class', 'compl', 'concept', 'const',
@@ -173,9 +132,61 @@ function Code({ error }) {
           'struct', 'switch', 'synchronized', 'template', 'this', 'thread_local', 'throw',
           'true', 'try', 'typedef', 'typeid', 'typename', 'union', 'unsigned', 'using',
           'virtual', 'void', 'volatile', 'wchar_t', 'while', 'xor', 'xor_eq'
+      ];    
+      const py = [
+        'and', 'as', 'assert', 'async', 'await', 'break', 'class', 'continue', 'def',
+        'del', 'elif', 'else', 'except', 'False', 'finally', 'for', 'from', 'global',
+        'if', 'import', 'in', 'is', 'lambda', 'None', 'nonlocal', 'not', 'or', 'pass',
+        'raise', 'return', 'True', 'try', 'while', 'with', 'yield'
+        ];
+    
+    const java = [
+        'abstract', 'assert', 'boolean', 'break', 'byte', 'case', 'catch', 'char',
+        'class', 'const', 'continue', 'default', 'do', 'double', 'else', 'enum',
+        'extends', 'final', 'finally', 'float', 'for', 'goto', 'if', 'implements',
+        'import', 'instanceof', 'int', 'interface', 'long', 'native', 'new', 'package',
+        'private', 'protected', 'public', 'return', 'short', 'static', 'strictfp',
+        'super', 'switch', 'synchronized', 'this', 'throw', 'throws', 'transient',
+        'try', 'void', 'volatile', 'while'
+        ];
+    
+    const c = [
+        'auto', 'break', 'case', 'char', 'const', 'continue', 'default', 'do',
+        'double', 'else', 'enum', 'extern', 'float', 'for', 'goto', 'if',
+        'int', 'long', 'register', 'return', 'short', 'signed', 'sizeof', 'static',
+        'struct', 'switch', 'typedef', 'union', 'unsigned', 'void', 'volatile', 'while'
+        ];
+        
+    const go = [
+        'break', 'default', 'func', 'interface', 'select', 'case', 'defer', 'go',
+        'map', 'struct', 'chan', 'else', 'goto', 'package', 'switch', 'const',
+        'fallthrough', 'if', 'range', 'type', 'continue', 'for', 'import', 'return',
+        'var'
+        ];
+        
+    const cs = [
+        'abstract', 'as', 'base', 'bool', 'break', 'byte', 'case', 'catch', 'char',
+        'checked', 'class', 'const', 'continue', 'decimal', 'default', 'delegate',
+        'do', 'double', 'else', 'enum', 'event', 'explicit', 'extern', 'false',
+        'finally', 'fixed', 'float', 'for', 'foreach', 'goto', 'if', 'implicit',
+        'in', 'int', 'interface', 'internal', 'is', 'lock', 'long', 'namespace',
+        'new', 'null', 'object', 'operator', 'out', 'override', 'params', 'private',
+        'protected', 'public', 'readonly', 'ref', 'return', 'sbyte', 'sealed',
+        'short', 'sizeof', 'stackalloc', 'static', 'string', 'struct', 'switch',
+        'this', 'throw', 'true', 'try', 'typeof', 'uint', 'ulong', 'unchecked',
+        'unsafe', 'ushort', 'using', 'using static', 'void', 'volatile', 'while',
+        'yield'
+        ];
+        
+    const js = [
+        'break', 'case', 'catch', 'class', 'const', 'continue', 'debugger', 'default',
+        'delete', 'do', 'else', 'enum', 'export', 'extends', 'false', 'finally', 'for',
+        'function', 'if', 'import', 'in', 'instanceof', 'new', 'null', 'return',
+        'super', 'switch', 'this', 'throw', 'true', 'try', 'typeof', 'undefined',
+        'var', 'void', 'while', 'with', 'yield'
       ];
   return (
-      <div className='m-9 border-2 border-gega-green min-w-[700px] min-h-[700px]'>
+      <div className='m-9 border-2 border-gega-green min-w-[900px] min-h-[700px]'>
         <div className='flex flex-row justify-between my-2'>
           <select value={language} onChange={handleSelection} className='ml-10 bg-gega-green border-none outline-none'>
             <option value="">Select a language</option>
@@ -196,13 +207,15 @@ function Code({ error }) {
             }
           </div>
           <div className='bg-gega-light-black'>
-            <textarea value={input} onChange={handleInput}  className='bg-gega-light-black text-gega-white pl-1' name="input" id="" cols="85" rows={rows}></textarea>
+            <textarea value={input} onChange={handleInput}  className='bg-gega-light-black text-gega-white pl-1' name="input" id="" cols="92" rows={rows}></textarea>
           </div>
-            <ul style={{ position: 'absolute', top: '100%', left: 0, zIndex: 1, background: 'black', color: 'white' }}>
-            {suggestedKeywords.map((keyword, index) => (
-              <li key={index} onClick={() => handleSuggestionClick(keyword)}>{keyword}</li>
-            ))}
+          <div>
+            <ul className='overflow-y-scroll h-[600px] text-gega-white mx-2 pr-2 border-y-1'>
+              {suggestedKeywords.map((keyword, index) => (
+                <li key={index} onClick={() => handleSuggestionClick(keyword)} className='border-0.5 border-t-0'>{keyword}</li>
+              ))}
             </ul>
+          </div>
         </div>
     </div>
   )
