@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 
 
-function Code({ onDataUpdate }) {
+function Code({ onDataUpdate, userInput, onRun }) {
     const [language, setLanguage] = useState('');
     const [input, setInput] = useState('');
     const [result, setResult] = useState('');
     const [outputs, setOutputs] = useState('');
     const [rows, setRows] = useState('25')
     const [errors, setErrors] = useState("")
-    const [userInput, setUserInput] = useState("")
-  // const [code, setCode] = useState('');
+    
+    const [code, setCode] = useState('');
     const [suggestedKeywords, setSuggestedKeywords] = useState([]);
     const [selectedKeyword, setSelectedKeyword] = useState('');
   
@@ -88,16 +88,17 @@ function Code({ onDataUpdate }) {
     const handleRun = () => {
       if (language && input) {
         fetchData();
+        onRun();
       }
     };
-    const handleUserInput = (e) => {
-      setUserInput(e.target.value);
-    }
-    const handleKeyEvent = (event) => {
-      if(event.key === 'Enter'){
-        handleRun();
-      }
-    }
+    // const handleUserInput = (e) => {
+    //   setUserInput(e.target.value);
+    // }
+    // const handleKeyEvent = (event) => {
+    //   if(event.key === 'Enter'){
+    //     handleRun();
+    //   }
+    // }
   
     const renderList = (rows) => {
       const listItems = [];
